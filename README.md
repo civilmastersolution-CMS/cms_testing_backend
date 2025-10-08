@@ -22,7 +22,7 @@ Public users can only view the website and submit request forms to inquire about
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 | Component             | Technology            |
 | --------------------- | --------------------- |
@@ -35,12 +35,12 @@ Public users can only view the website and submit request forms to inquire about
 
 ---
 
-## ⚙️ Installation Guide
+## Installation Guide
 
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/Thantwyl/cms-backend.git
+git clone https://github.com/civilmastersolution-CMS/cms_testing_backend.git
 cd cms-backend
 ```
 
@@ -74,18 +74,18 @@ pip install -r requirements.txt
 Create a `.env` file in your project root:
 
 ```
-password = eZ9udkUZPS5QqXBg
+password = [Your_Password]
 
-DJANGO_SECRET_KEY = 'django-insecure-dzfm4u_u9hwz07nus$&_^y%z%#8@vnv*nw%7&p5!h=mod4=$$*'
+DJANGO_SECRET_KEY = [secret_key]
 DEBUG = True
 ALLOWED_HOSTS = localhost,127.0.0.1
 
 supabase connection
 DB_NAME = postgres
 DB_USER = postgres
-DB_PASSWORD = eZ9udkUZPS5QqXBg
-DB_HOST = db.jngwmhiicwgcrcogawxi.supabase.co
-DB_PORT = 5432
+DB_PASSWORD = [Your_Password]
+DB_HOST = [Your_Database_Host]
+DB_PORT = [Your_Port_Number]
 ```
 
 ### 6. Run migrations
@@ -108,7 +108,7 @@ python manage.py runserver
 
 ---
 
-## 🔑 API Endpoints
+## API Endpoints
 
 | Function            | Endpoint                    | Method |
 | ------------------- | --------------------------- | ------ |
@@ -144,10 +144,6 @@ python manage.py runserver
 
 **Civil Master Solution (CMS)**
 Developed by: *Thantwyl*
-Repository: [GitHub - cms-backend](https://github.com/Thantwyl/cms-backend)
+Repository: [GitHub - cms_testing_backend](https://github.com/civilmastersolution-CMS/cms_testing_backend.git)
 
 ---
-
-## License
-
-This project is licensed under the **MIT License**.
