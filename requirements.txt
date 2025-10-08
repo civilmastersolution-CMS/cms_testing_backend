@@ -1,0 +1,12 @@
+asgiref==3.10.0
+
+# Django Core
+Django==5.2.7
+django-cors-headers==4.9.0
+djangorestframework==3.16.1
+
+# PostgreSQL
+psycopg2-binary==2.9.10
+python-dotenv==1.1.1
+sqlparse==0.5.3
+tzdata==2025.2
