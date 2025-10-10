@@ -7,18 +7,20 @@ Public users can only view the website and submit request forms to inquire about
 
 ## Features
 
-* Django REST Framework-based backend
-* PostgreSQL database integration
-* CORS enabled for frontend connection
-* Admin panel for managing:
+* Built with **Django REST Framework (DRF)**
+* **PostgreSQL (Supabase)** integration for data storage
+* **JWT authentication** for secure admin access
+* **CORS enabled** for frontend integration
+* Easy **Request Form submission** for public users
+* Separate **Admin API routes** for content management
 
-  * Partnerships
-  * Customerships
-  * Products
-  * Request Forms (user inquiries)
-  * Project References
-  * News
-* Public API endpoints for fetching and submitting data
+### 🔧 Admin can manage:
+* Partnerships  
+* Customerships  
+* Products  
+* Request Forms (from public users)  
+* Project References  
+* News 
 
 ---
 
@@ -28,10 +30,11 @@ Public users can only view the website and submit request forms to inquire about
 | --------------------- | --------------------- |
 | Backend Framework     | Django 5.2            |
 | REST API              | Django REST Framework |
-| Database              | PostgreSQL (supabase) |
-| Deployment Ready      | Yes                   |
+| Authentication        | JWT (SimpleJWT)       |
+| Database              | PostgreSQL (Supabase) |
+| Deployment Ready      | ✅ Yes                 |
 | Environment Variables | `.env` file           |
-| Virtual Environment   | Python venv           |
+| Virtual Environment   | Python `venv`         | 
 
 ---
 
@@ -78,7 +81,7 @@ password = [Your_Password]
 
 DJANGO_SECRET_KEY = [secret_key]
 DEBUG = True
-ALLOWED_HOSTS = localhost,127.0.0.1
+ALLOWED_HOSTS = [Your_Host]
 
 supabase connection
 DB_NAME = postgres
