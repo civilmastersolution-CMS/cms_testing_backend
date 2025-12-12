@@ -182,14 +182,46 @@ class NewsSerializer(serializers.ModelSerializer):
 
 class ArticleSerializer(serializers.ModelSerializer):
     pdf_file = serializers.FileField(write_only=True, required=False)
+    keyword = serializers.CharField(required=False, allow_blank=True, allow_null=True)
     
     class Meta:
         model = Article
         fields = '__all__'
     
+    def validate_keyword(self, value):
+        """Handle keyword as either list or JSON string from FormData"""
+        import json
+        import re
+        
+        if value is None or value == '':
+            return []
+        
+        if isinstance(value, str):
+            try:
+                # Try to parse as JSON string
+                parsed = json.loads(value)
+                if isinstance(parsed, list):
+                    # Filter out empty strings from parsed list
+                    return [k.strip() for k in parsed if k and str(k).strip()]
+                return []
+            except (json.JSONDecodeError, ValueError, TypeError):
+                # If not JSON, split by comma, semicolon, or pipe and filter empty strings
+                keywords = re.split(r'[,;|]', value)
+                return [k.strip() for k in keywords if k.strip()]
+        
+        if isinstance(value, list):
+            # Filter out empty strings from list
+            return [k.strip() for k in value if k and str(k).strip()]
+        
+        return []
+    
     def create(self, validated_data):
         # Handle PDF file upload
         pdf_file = validated_data.pop('pdf_file', None)
+        
+        # Ensure keyword is a list
+        if 'keyword' not in validated_data or validated_data.get('keyword') is None:
+            validated_data['keyword'] = []
         
         # Create the article instance
         article = Article.objects.create(**validated_data)
@@ -205,6 +237,11 @@ class ArticleSerializer(serializers.ModelSerializer):
         # Handle PDF file upload
         pdf_file = validated_data.pop('pdf_file', None)
         
+        # Ensure keyword is a list
+        if 'keyword' in validated_data and validated_data.get('keyword') is not None:
+            # keyword validation already handled by validate_keyword method
+            pass
+        
         # Update fields
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
@@ -217,12 +254,22 @@ class ArticleSerializer(serializers.ModelSerializer):
         return instance
     
     def to_representation(self, instance):
-        """Customize the representation to ensure article_image data is properly formatted."""
+        """Customize the representation to ensure article_image and keyword data is properly formatted."""
         data = super().to_representation(instance)
         
         # Ensure article_image is always a list
         if not isinstance(data.get('article_image'), list):
             data['article_image'] = []
+        
+        # Ensure keyword is always a list (convert from DB if needed)
+        keyword_value = instance.keyword if hasattr(instance, 'keyword') else data.get('keyword')
+        if isinstance(keyword_value, list):
+            data['keyword'] = keyword_value
+        elif isinstance(keyword_value, str):
+            # If somehow stored as string, convert it
+            data['keyword'] = [k.strip() for k in keyword_value.split(',') if k.strip()]
+        else:
+            data['keyword'] = []
         
         # Add full URL for PDF file if it exists
         if instance.pdf_file:

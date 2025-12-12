@@ -1,0 +1,29 @@
+[
+  {
+    "project_name": "Example Project 1",
+    "location": "Yangon, Myanmar",
+    "site_area": "1500 sq m",
+    "date_time": "2024-01-15",
+    "contractor": "ABC Construction",
+    "layout_type": 1,
+    "is_favorite": true,
+    "position": 1,
+    "project_image": [
+      "https://example.com/project1_image1.jpg",
+      "https://example.com/project1_image2.jpg"
+    ]
+  },
+  {
+    "project_name": "Example Project 2",
+    "location": "Mandalay, Myanmar",
+    "site_area": "2000 sq m",
+    "date_time": "2024-02-01",
+    "contractor": "XYZ Builders",
+    "layout_type": 2,
+    "is_favorite": false,
+    "position": 2,
+    "project_image": [
+      "https://example.com/project2_image1.jpg"
+    ]
+  }
+]

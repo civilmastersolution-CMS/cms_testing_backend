@@ -1,0 +1,23 @@
+[
+  {
+    "article_title": "Example Article 1",
+    "category": "Technology",
+    "content_html": "<h2>Introduction</h2><p>This is an example article with HTML content. You can include formatted text, lists, and other HTML elements.</p><h3>Key Points</h3><ul><li>Point 1</li><li>Point 2</li><li>Point 3</li></ul><p>More content here...</p>",
+    "keyword": ["technology", "construction", "innovation"],
+    "article_image": [
+      "https://example.com/article1_image.jpg"
+    ],
+    "content": []
+  },
+  {
+    "article_title": "Example Article 2",
+    "category": "Industry",
+    "content_html": "<h2>Article Content</h2><p>The main content of your article goes here. This field supports HTML formatting.</p><p>You can add multiple paragraphs, headers, lists, and other HTML elements as needed.</p>",
+    "keyword": ["industry", "business", "growth"],
+    "article_image": [
+      "https://example.com/article2_image1.jpg",
+      "https://example.com/article2_image2.jpg"
+    ],
+    "content": []
+  }
+]

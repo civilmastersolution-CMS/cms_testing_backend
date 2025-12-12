@@ -121,13 +121,26 @@ class AdminArticleViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAdminUser]
 
     def create(self, request, *args, **kwargs):
-        """Handle article creation with PDF file upload"""
+        """Handle article creation with PDF file upload and images"""
         data = request.data.copy()
         
         # Handle PDF file if provided
         pdf_file = request.FILES.get('pdf_file')
         if pdf_file:
             data['pdf_file'] = pdf_file
+        
+        # Handle article images if provided
+        images = request.FILES.getlist('article_image')
+        if images:
+            # Process images and convert to base64 for storage
+            image_data_list = []
+            for image in images:
+                import base64
+                image_content = image.read()
+                encoded_image = base64.b64encode(image_content).decode('utf-8')
+                data_url = f"data:{image.content_type};base64,{encoded_image}"
+                image_data_list.append(data_url)
+            data['article_image'] = image_data_list
         
         serializer = self.get_serializer(data=data, context={'request': request})
         serializer.is_valid(raise_exception=True)
@@ -136,7 +149,7 @@ class AdminArticleViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
     
     def update(self, request, *args, **kwargs):
-        """Handle article update with PDF file upload"""
+        """Handle article update with PDF file upload and images"""
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
         data = request.data.copy()
@@ -145,6 +158,19 @@ class AdminArticleViewSet(viewsets.ModelViewSet):
         pdf_file = request.FILES.get('pdf_file')
         if pdf_file:
             data['pdf_file'] = pdf_file
+        
+        # Handle article images if provided  
+        images = request.FILES.getlist('article_image')
+        if images:
+            # Process images and convert to base64 for storage
+            image_data_list = []
+            for image in images:
+                import base64
+                image_content = image.read()
+                encoded_image = base64.b64encode(image_content).decode('utf-8')
+                data_url = f"data:{image.content_type};base64,{encoded_image}"
+                image_data_list.append(data_url)
+            data['article_image'] = image_data_list
         
         serializer = self.get_serializer(instance, data=data, partial=partial, context={'request': request})
         serializer.is_valid(raise_exception=True)
