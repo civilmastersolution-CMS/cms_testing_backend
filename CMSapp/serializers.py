@@ -188,32 +188,6 @@ class ArticleSerializer(serializers.ModelSerializer):
         model = Article
         fields = '__all__'
     
-    def to_representation(self, instance):
-        """Custom representation to handle missing PDF files"""
-        import os
-        data = super().to_representation(instance)
-        
-        # Check if PDF file exists and is accessible
-        if instance.pdf_file:
-            try:
-                # Check if file exists on disk
-                if hasattr(instance.pdf_file, 'path') and os.path.exists(instance.pdf_file.path):
-                    # File exists locally, return the URL
-                    if hasattr(instance.pdf_file, 'url'):
-                        data['pdf_file'] = self.context['request'].build_absolute_uri(instance.pdf_file.url)
-                    else:
-                        data['pdf_file'] = None
-                else:
-                    # File doesn't exist, return None
-                    data['pdf_file'] = None
-            except (ValueError, OSError, AttributeError):
-                # File path doesn't exist or other error, return None
-                data['pdf_file'] = None
-        else:
-            data['pdf_file'] = None
-            
-        return data
-    
     def validate_keyword(self, value):
         """Handle keyword as either list or JSON string from FormData"""
         import json
