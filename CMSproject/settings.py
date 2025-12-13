@@ -193,8 +193,16 @@ if os.path.exists(os.path.join(BASE_DIR, 'static')):
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Media files configuration
+# On Render, use persistent disk path if available, otherwise use local media directory
+if os.environ.get('RENDER'):
+    # Render persistent disk is typically mounted at /opt/render/project/data
+    # Or check for RENDER_EXTERNAL_DISK environment variable
+    MEDIA_ROOT = os.environ.get('MEDIA_ROOT', '/opt/render/project/data/media')
+else:
+    # Local development
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field

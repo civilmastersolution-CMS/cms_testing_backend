@@ -36,8 +36,14 @@ services:
         sync: false
       - key: ADMIN_ALERT_EMAIL
         sync: false
+      - key: MEDIA_ROOT
+        value: "/opt/render/project/data/media"
     healthCheckPath: /admin/login/
     autoDeploy: true
+    disk:
+      name: cms-media-storage
+      mountPath: /opt/render/project/data
+      sizeGB: 1
 
 databases:
   - name: cms-postgres-db
