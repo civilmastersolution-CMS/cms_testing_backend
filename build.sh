@@ -9,6 +9,10 @@ pip install -r requirements.txt
 echo "📦 Collecting static files..."
 python manage.py collectstatic --no-input
 
+echo "📁 Creating media directories..."
+mkdir -p media/articles/pdfs
+chmod -R 755 media
+
 echo "🗄️ Running migrations..."
 python manage.py migrate
 

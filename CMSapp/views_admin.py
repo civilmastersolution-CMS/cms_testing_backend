@@ -7,6 +7,7 @@ from rest_framework import status
 from .serializers import PartnershipSerializer, CustomershipSerializer, ProductSerializer, RequestFormSerializer, ProjectReferenceSerializer, NewsSerializer, ArticleSerializer
 import os
 import uuid
+import logging
 from django.conf import settings
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
@@ -190,7 +191,7 @@ class AdminArticleViewSet(viewsets.ModelViewSet):
             keyword = request.data.get('keyword')
             category = request.data.get('category')
 
-            print(f"Received data: html_file={html_file}, images={len(images)}, pdf_file={pdf_file}, title={article_title}")
+            logging.info(f"Received article upload: title={article_title}, html={bool(html_file)}, images={len(images)}, pdf={bool(pdf_file)}")
 
             if not article_title:
                 return Response({'error': 'Article title is required'}, status=status.HTTP_400_BAD_REQUEST)
@@ -290,14 +291,20 @@ class AdminArticleViewSet(viewsets.ModelViewSet):
             
             # Handle PDF file upload separately
             if pdf_file:
-                article.pdf_file = pdf_file
-                article.save()
+                try:
+                    article.pdf_file = pdf_file
+                    article.save()
+                    logging.info(f"PDF file saved: {article.pdf_file.name}")
+                except Exception as pdf_error:
+                    logging.error(f"Error saving PDF file: {pdf_error}")
+                    # Continue even if PDF fails
 
             # Get serializer with request context for proper URL generation
             serializer = self.get_serializer(article, context={'request': request})
             return Response(serializer.data, status=status.HTTP_201_CREATED)
             
         except Exception as e:
+            logging.error(f"Error creating article: {str(e)}", exc_info=True)
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
 class AdminLogViewSet(viewsets.ViewSet):
