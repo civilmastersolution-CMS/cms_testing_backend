@@ -215,13 +215,46 @@ class ArticleSerializer(serializers.ModelSerializer):
         
         return []
     
+    def validate_content(self, value):
+        """Handle content as either JSON object or JSON string from FormData"""
+        import json
+        
+        if value is None or value == '':
+            # Return default empty TipTap document
+            return {"type": "doc", "content": [{"type": "paragraph"}]}
+        
+        if isinstance(value, str):
+            try:
+                # Try to parse as JSON string
+                parsed = json.loads(value)
+                if isinstance(parsed, dict):
+                    return parsed
+                # If not a dict, return default
+                return {"type": "doc", "content": [{"type": "paragraph"}]}
+            except (json.JSONDecodeError, ValueError, TypeError):
+                # If not JSON, return default
+                return {"type": "doc", "content": [{"type": "paragraph"}]}
+        
+        if isinstance(value, dict):
+            return value
+        
+        # Default empty document
+        return {"type": "doc", "content": [{"type": "paragraph"}]}
+    
     def create(self, validated_data):
+        import logging
         # Handle PDF file upload
         pdf_file = validated_data.pop('pdf_file', None)
         
         # Ensure keyword is a list
         if 'keyword' not in validated_data or validated_data.get('keyword') is None:
             validated_data['keyword'] = []
+        
+        # Ensure content is set (either from content or content_html)
+        if 'content' not in validated_data or not validated_data.get('content'):
+            validated_data['content'] = {"type": "doc", "content": [{"type": "paragraph"}]}
+        
+        logging.info(f"Creating article with validated_data keys: {validated_data.keys()}")
         
         # Create the article instance
         article = Article.objects.create(**validated_data)
