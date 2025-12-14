@@ -2,8 +2,8 @@ from rest_framework import viewsets, mixins
 from rest_framework.permissions import AllowAny
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from .models import Partnership, Customership, Product, RequestForm, ProjectReference, News, Article
-from .serializers import PartnershipSerializer, CustomershipSerializer, ProductSerializer, RequestFormSerializer, ProjectReferenceSerializer, NewsSerializer, ArticleSerializer
+from .models import Partnership, Product, RequestForm, ProjectReference, News, Article
+from .serializers import PartnershipSerializer, ProductSerializer, RequestFormSerializer, ProjectReferenceSerializer, NewsSerializer, ArticleSerializer
 from django.core.mail import EmailMessage
 from django.conf import settings
 from django.utils.html import escape
@@ -17,10 +17,6 @@ class ReadOnlyViewSet(viewsets.ReadOnlyModelViewSet):
 class PartnershipViewSet(ReadOnlyViewSet):
     queryset = Partnership.objects.all()
     serializer_class = PartnershipSerializer
-    
-class CustomershipViewSet(ReadOnlyViewSet):
-    queryset = Customership.objects.all()
-    serializer_class = CustomershipSerializer
 
 class ProductViewSet(ReadOnlyViewSet):
     queryset = Product.objects.all().order_by('position')
@@ -36,7 +32,7 @@ class RequestFormViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
         html_body = f"""
           <p>Hi <strong>{escape(instance.full_name)}</strong>,</p>
           <p>Thank you for submitting your request to Civil Master Solution (CMS). We’ve received your inquiry for: {escape(instance.product_name)}.</p>
-          <p>Our team will review it and get back to you within 2-3 business days. If you have questions, contact us at cms@civilmastersolution.com.</p>
+          <p>Our team will review it and get back to you within 2-3 business days. If you have questions, contact us at civilmastersolution@gmail.com.</p>
           <p>Best regards,<br/>Civil Master Solution Team<br/>www.civilmastersolution.com</p>
         """
         email = EmailMessage(
@@ -44,7 +40,7 @@ class RequestFormViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
             body=html_body,
             from_email=settings.DEFAULT_FROM_EMAIL,
             to=[instance.email_address],
-            headers={"Reply-To": "cms@civilmastersolution.com"},
+            headers={"Reply-To": "civilmastersolution@gmail.com"},
         )
         email.content_subtype = "html"
         

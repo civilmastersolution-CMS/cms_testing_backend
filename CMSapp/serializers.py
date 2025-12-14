@@ -1,14 +1,14 @@
 from rest_framework import serializers
-from .models import Partnership, Customership, Product, RequestForm, ProjectReference, News, Article
+from .models import Partnership, Product, RequestForm, ProjectReference, News, Article
+import base64
+import json
+import re
+import logging
+from io import BytesIO
 
 class PartnershipSerializer(serializers.ModelSerializer):
     class Meta:
         model = Partnership
-        fields = '__all__'
-
-class CustomershipSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Customership
         fields = '__all__'
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -38,9 +38,6 @@ class NewsSerializer(serializers.ModelSerializer):
     
     def validate_keyword(self, value):
         """Handle keyword as either list or JSON string from FormData"""
-        import json
-        import re
-        
         if value is None or value == '':
             return []
         
@@ -65,7 +62,6 @@ class NewsSerializer(serializers.ModelSerializer):
     
     def validate_news_image(self, value):
         """Handle news_image as either list or JSON string from FormData"""
-        import json
         
         if value is None or value == '':
             return []
@@ -112,9 +108,6 @@ class NewsSerializer(serializers.ModelSerializer):
         
         # Process image if provided
         if image:
-            import base64
-            from io import BytesIO
-            
             # Convert image to base64
             buffer = BytesIO()
             for chunk in image.chunks():
@@ -139,9 +132,6 @@ class NewsSerializer(serializers.ModelSerializer):
         
         # Process image if provided
         if image:
-            import base64
-            from io import BytesIO
-            
             # Convert image to base64
             buffer = BytesIO()
             for chunk in image.chunks():
@@ -190,9 +180,6 @@ class ArticleSerializer(serializers.ModelSerializer):
     
     def validate_keyword(self, value):
         """Handle keyword as either list or JSON string from FormData"""
-        import json
-        import re
-        
         if value is None or value == '':
             return []
         
@@ -217,7 +204,6 @@ class ArticleSerializer(serializers.ModelSerializer):
     
     def validate_content(self, value):
         """Handle content as either JSON object or JSON string from FormData"""
-        import json
         
         if value is None or value == '':
             # Return default empty TipTap document
@@ -242,7 +228,6 @@ class ArticleSerializer(serializers.ModelSerializer):
         return {"type": "doc", "content": [{"type": "paragraph"}]}
     
     def create(self, validated_data):
-        import logging
         # Handle PDF file upload
         pdf_file = validated_data.pop('pdf_file', None)
         

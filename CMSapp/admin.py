@@ -1,13 +1,9 @@
 from django.contrib import admin
-from .models import Partnership, Customership, Product, RequestForm, ProjectReference, News, Article
+from .models import Partnership, Product, RequestForm, ProjectReference, News, Article
 
 @admin.register(Partnership)
 class PartnershipAdmin(admin.ModelAdmin):
     list_display = ('partner_name', 'partner_image')
-
-@admin.register(Customership)
-class CustomershipAdmin(admin.ModelAdmin):
-    list_display = ('customer_name', 'customer_image')
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):

@@ -6,12 +6,6 @@ class Partnership(models.Model):
     def __str__(self):
         return self.partner_name
 
-class Customership(models.Model):
-    customer_name = models.CharField(max_length=255, null=True, blank=True)
-    customer_image = models.JSONField(default=list)
-    def __str__(self):
-        return self.customer_name
-
 class Product(models.Model):
     product_name = models.CharField(max_length=255, null=False, blank=False)
     product_image = models.JSONField(default=list)
